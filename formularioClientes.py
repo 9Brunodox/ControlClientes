@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 
 class FormularioCliente(ttk.LabelFrame):
-    def __init__(self, master, on_salvar, on_atualizar):
+    def __init__(self, master, on_salvar, on_atualizar, on_excluir):
         super().__init__(master, text="Cadastro de Cliente")
-
         self.on_salvar = on_salvar
         self.on_atualizar = on_atualizar
+        self.on_excluir = on_excluir
 
         self.id_var = tk.StringVar()
         self.nome_var = tk.StringVar()
@@ -27,6 +27,7 @@ class FormularioCliente(ttk.LabelFrame):
         ttk.Label(self, text="Endereço").grid(row=3, column=0, sticky="w", padx=5, pady=5)
         ttk.Entry(self, textvariable=self.endereco_var).grid(row=3, column=1, sticky="ew", padx=5)
 
+
         # Botões
         botoes = ttk.Frame(self)
         botoes.grid(row=4, column=0, columnspan=2, sticky="e", padx=5, pady=10)
@@ -37,8 +38,15 @@ class FormularioCliente(ttk.LabelFrame):
         self.btn_atualizar = ttk.Button(botoes, text="Atualizar", command=self._atualizar, state="disabled")
         self.btn_atualizar.grid(row=0, column=1, padx=5)
 
+        self.btn_atualizar = ttk.Button(botoes, text="Atualizar", command=self._atualizar, state="disabled")
+        self.btn_atualizar.grid(row=0, column=1, padx=5)
+
         self.btn_limpar = ttk.Button(botoes, text="Limpar", command=self.limpar)
         self.btn_limpar.grid(row=0, column=2, padx=5)
+
+        self.btn_excluir = ttk.Button(botoes, text="Excluir", command=self._excluir, state="disabled")
+        self.btn_excluir.grid(row=0, column=3, padx=5)
+
 
         self.columnconfigure(1, weight=1)
 
@@ -78,7 +86,17 @@ class FormularioCliente(ttk.LabelFrame):
     def _ativar_salvar(self):
         self.btn_salvar.config(state="normal")
         self.btn_atualizar.config(state="disabled")
+        self.btn_excluir.config(state="disabled")
+
 
     def _ativar_atualizar(self):
         self.btn_salvar.config(state="disabled")
         self.btn_atualizar.config(state="normal")
+        self.btn_excluir.config(state="normal")
+
+
+    def _excluir(self):
+        dados = self._obter_dados()
+        if dados["id"]:
+            self.on_excluir(dados)
+

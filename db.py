@@ -51,3 +51,7 @@ def atualizar_cliente(id, name, email, phone, address):
             SET name = ?, email = ?, phone = ?, address = ?
             WHERE id = ?
         """, (name.strip(), email.strip(), phone.strip(), address.strip(), id))
+
+def excluir_cliente(id_):
+    with get_conn() as conn:
+        conn.execute("DELETE FROM clientes WHERE id = ?", (id_,))

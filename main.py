@@ -43,7 +43,7 @@ def editar_cliente(formulario, lista):
         formulario.preencher(cliente)
 
 def excluir_cliente(formulario, lista):
-    id_ = lista.get.selected_id()
+    id_ = lista.get_selected_id()
     if id_ is None:
         messagebox.showwarning("Seleção", "Selecione um cliente para excluir.")
         return
@@ -51,6 +51,19 @@ def excluir_cliente(formulario, lista):
         db.excluir_cliente(id_)
         formulario.limpar()
         carregar_clientes(lista)
+
+def excluir_cliente_button(dados, formulario, lista):
+    id_ = dados["id"]
+    if not id_:
+        messagebox.showwarning("Seleção", "Nenhum cliente selecionado para excluir.")
+        return
+
+    if messagebox.askyesno("Excluir", "Tem certeza que deseja excluir este cliente?"):
+        db.excluir_cliente(id_)
+        messagebox.showinfo("Excluído", "Cliente excluído com sucesso!")
+        formulario.limpar()
+        carregar_clientes(lista)
+
 
 def main():
     db.init_db()
@@ -68,7 +81,8 @@ def main():
     formulario = FormularioCliente(
         root,
         on_salvar=lambda dados: salvar_cliente(dados, formulario, lista),
-        on_atualizar=lambda dados: atualizar_cliente(dados, formulario, lista)
+        on_atualizar=lambda dados: atualizar_cliente(dados, formulario, lista),
+        on_excluir=lambda dados: excluir_cliente_button(dados, formulario, lista)
     )
     formulario.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
