@@ -33,3 +33,9 @@ class listaClientes(ttk.LabelFrame):
                 cliente["phone"],
                 cliente["address"]
             ))
+    def get_selected_id(self):
+        selecionado = self.tree.selection()
+        if not selecionado:
+            return None
+        item = self.tree.item(selecionado)
+        return item["values"][0]  # Retorna o ID (que é o primeiro valor)
